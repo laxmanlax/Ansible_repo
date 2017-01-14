@@ -1,0 +1,22 @@
+---
+- name: set /etc/hosts
+  lineinfile: dest=/etc/hosts line="127.0.1.1 {{item.key}}" regexp='^127\.0\.1\.1' insertafter='^127\.0\.0\.1' state=present
+  when: "ansible_eth1.ipv4.address in item.value.ip"
+  with_dict: "{{ host }}"
+
+- name: set /etc/hostname
+  replace: dest=/etc/hostname  regexp='^{{hostname_name}}' replace={{item.key}}
+  when: "ansible_eth1.ipv4.address in item.value.ip"
+  with_dict: "{{ host }}"
+
+- name: Set hostname
+  shell: hostname {{ item.key }}
+  when: "ansible_eth1.ipv4.address in item.value.ip"
+  with_dict: "{{ host }}"
+
+- name: Hostnameis
+  shell: hostname
+  register: active
+
+- name: Hostnameis
+  debug: msg="{{active.stdout_lines}}"
