@@ -1,0 +1,17 @@
+---
+- name: install necessary packages
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - curl
+
+- name: install chef
+  shell: curl -L https://www.chef.io/chef/install.sh | sudo bash /dev/stdin -v 12.3.0
+
+- name: deploy templates and files on nodes
+  template: src=chef/client.rb dest=/etc/chef/client.rb mode=0644
+
+- name: copy validator pem
+  copy: src=chef/blr-validator.pem  dest=/etc/chef/blr-validator.pem mode=0644
+
+- name: create var dir
+  file: path=/var/log/chef state=directory mode=0755
