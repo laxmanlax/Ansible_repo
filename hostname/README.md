@@ -1,4 +1,4 @@
-Role Name
+Set Hostname
 =========
 This role helps to set hostname in all servers , here you just have to define what hostname you want with IP
 
